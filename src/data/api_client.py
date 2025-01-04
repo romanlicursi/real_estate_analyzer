@@ -1,7 +1,10 @@
+import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), "../../"))
 import requests
 import pandas as pd
 from dotenv import load_dotenv
-import os
+from src.analysis.financial_calculator import FinancialCalculator
 
 # Load the API key from the .env file
 load_dotenv(dotenv_path="config/.env")
@@ -26,7 +29,6 @@ def fetch_property_data(location):
 
 def clean_property_data(raw_data):
     """Clean and format the raw property data into a DataFrame."""
-    # Extract property data from the API response
     properties = raw_data.get("props", [])
     if not properties:
         print("No properties found.")
@@ -38,20 +40,43 @@ def clean_property_data(raw_data):
     # Print available columns for debugging
     print("Available columns:", df.columns.tolist())
 
-    # Define columns to keep (adjust based on actual API response)
+    # Define columns to keep
     columns_to_keep = ["address", "price", "beds", "baths", "area", "statusText"]
-
-    # Keep only columns that exist in the data
     existing_columns = [col for col in columns_to_keep if col in df.columns]
     print("Columns to keep:", existing_columns)
     df = df[existing_columns]
 
     # Ensure 'price' is treated as a string before cleaning
     if "price" in df.columns:
-        df["price"] = df["price"].astype(str)  # Convert to string
+        df["price"] = df["price"].astype(str)
         df["price"] = df["price"].str.replace("$", "").str.replace(",", "").astype(float)
 
     return df
+
+def analyze_properties_with_financials(raw_data, rent=2500, expenses=500):
+    """Analyze properties with financial metrics."""
+    properties = raw_data.get("props", [])
+    results = []
+
+    for prop in properties:
+        price = prop.get("price", None)
+
+        # Clean or validate the price
+        if isinstance(price, str):  # If price is a string, clean it
+            price = price.replace("$", "").replace(",", "")
+            if price.isdigit():  # Convert cleaned string to integer
+                price = int(price)
+            else:
+                price = None  # Invalid price
+
+        # Ensure price is an integer
+        if isinstance(price, int):
+            calculator = FinancialCalculator(price, 20, 5, 30)
+            analysis = calculator.analyze_property(rent, expenses)
+            analysis["address"] = prop.get("address", "N/A")
+            results.append(analysis)
+
+    return pd.DataFrame(results)
 
 
 def save_data_to_csv(df, filename="property_data.csv"):
@@ -69,9 +94,11 @@ if __name__ == "__main__":
         print("Raw Data Response:")
         print(raw_data)
 
-    # Clean the data and save to CSV
+    # Clean the data
     if raw_data:
-        df = clean_property_data(raw_data)
-        if df is not None:
-            save_data_to_csv(df)
+        financial_data = analyze_properties_with_financials(raw_data)
+        if not financial_data.empty:
+            print("Financial Analysis Results:")
+            print(financial_data)
+            financial_data.to_csv("financial_analysis.csv", index=False)
 
