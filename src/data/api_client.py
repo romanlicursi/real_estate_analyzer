@@ -62,21 +62,27 @@ def analyze_properties_with_financials(raw_data, rent=2500, expenses=500):
     for prop in properties:
         price = prop.get("price", None)
 
-        # Clean or validate the price
-        if isinstance(price, str):  # If price is a string, clean it
+        # Handle cases where price is a string or integer
+        if isinstance(price, str):
             price = price.replace("$", "").replace(",", "")
-            if price.isdigit():  # Convert cleaned string to integer
+            if price.isdigit():
                 price = int(price)
-            else:
-                price = None  # Invalid price
 
-        # Ensure price is an integer
-        if isinstance(price, int):
-            calculator = FinancialCalculator(price, 20, 5, 30)
-            analysis = calculator.analyze_property(rent, expenses)
-            analysis["address"] = prop.get("address", "N/A")
-            results.append(analysis)
+        if not isinstance(price, int):  # Skip properties with invalid price
+            print(f"Skipping property with invalid price: {prop}")
+            continue
 
+        # Perform financial analysis
+        calculator = FinancialCalculator(price, 20, 5, 30)
+        analysis = calculator.analyze_property(rent, expenses)
+
+        # Add the address, price, and analysis to results
+        analysis["address"] = prop.get("address", "N/A")
+        analysis["price"] = price  # Include the original price
+        results.append(analysis)
+
+    # Debug the results
+    print(f"Processed {len(results)} properties.")
     return pd.DataFrame(results)
 
 
@@ -88,8 +94,16 @@ def save_data_to_csv(df, filename="property_data.csv"):
 # Example usage
 if __name__ == "__main__":
     raw_data = fetch_property_data("Madison, WI")
+    print("Raw Data Keys:", raw_data.keys())  # Check top-level key
+    print("First Property Sample:", raw_data.get("props", [])[0])  # Print the first property
+
     if raw_data:
         financial_data = analyze_properties_with_financials(raw_data)
+
+        # Add debug statement here
+        print("Financial Data Columns:", financial_data.columns.tolist())
+        print("Sample Data:\n", financial_data.head())
+
         if not financial_data.empty:
             print("Financial Analysis Results:")
             print(financial_data)
