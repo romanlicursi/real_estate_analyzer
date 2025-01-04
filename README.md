@@ -31,7 +31,7 @@ This interactive tool fetches real estate data from the Zillow API, performs fin
 ## Screenshots
 
 ### ROI Bar Chart
-![ROI Bar Chart](screenshots/barchart.png)
+![ROI Bar Chart](screenshots/bargraph.png)
 
 ### Price vs. Cash Flow Scatter Plot
 ![Price vs. Cash Flow](screenshots/scatter.png)

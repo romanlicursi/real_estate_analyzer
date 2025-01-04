@@ -15,9 +15,9 @@ def plot_roi_bar_chart(df):
             title="Properties Ranked by ROI",
             labels={"roi": "Return on Investment (%)", "address": "Property Address"},
         )
-        fig.show()
+        return fig
     else:
-        print("Required columns ('roi', 'address') are missing in DataFrame.")
+        raise ValueError("Required columns ('roi', 'address') are missing in DataFrame.")
 
 def plot_price_vs_cash_flow(df):
     """
@@ -33,7 +33,7 @@ def plot_price_vs_cash_flow(df):
             title="Price vs. Monthly Cash Flow",
             labels={"price": "Property Price ($)", "monthly_cash_flow": "Monthly Cash Flow ($)"},
         )
-        fig.show()
+        return fig
     else:
-        print("Required columns ('price', 'monthly_cash_flow') are missing in DataFrame.")
+        raise ValueError("Required columns ('price', 'monthly_cash_flow') are missing in DataFrame.")
 
