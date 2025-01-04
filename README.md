@@ -1,65 +1,85 @@
-# Real Estate Analyzer
+# Real Estate Investment Dashboard
 
-A Python-based tool for analyzing real estate investments, designed to help identify house-hacking 
-opportunities by pulling and processing data from the Zillow API.
+Analyze profitable house-hacking opportunities using Python, Streamlit, and Plotly.
+
+## Project Description
+
+This interactive tool fetches real estate data from the Zillow API, performs financial modeling, and visualizes key metrics like ROI and cash flow. Designed for aspiring investors, it simplifies identifying house-hacking opportunities with actionable insights.
 
 ## Features
-- **API Integration**: Fetch property data using the Zillow API.
-- **Data Cleaning**: Process and clean raw property data into a structured format.
-- **CSV Export**: Save cleaned property data to a CSV file for further analysis.
-- **Expandable Design**: Modular structure for adding financial analysis and visualizations.
 
-## Technology Stack
-- **Python**: Core programming language.
-- **Pandas**: Data cleaning and processing.
-- **Requests**: API interaction.
-- **Dotenv**: Securely manage API keys.
-- **Zillow API**: Source for real estate data.
+- Fetches real estate data using the Zillow API
+- Cleans and processes raw data for analysis
+- Calculates key financial metrics:
+  - Return on Investment (ROI)
+  - Monthly cash flow
+  - Annual cash flow
+- Provides dynamic visualizations:
+  - ROI bar chart
+  - Price vs. cash flow scatter plot
+- Interactive dashboard with user inputs for:
+  - Location
+  - Rent and expenses
 
-## Project Structure
-real_estate_analyzer/ │ ├── config/ │ └── .env # Stores API key ├── src/ │ ├── data/ │ 
-│ └── api_client.py # Fetch and process property data │ ├── analysis/ # Future financial 
-analysis features │ └── visualization/ # Future visualization features ├── tests/ # Unit tests 
-├── property_data.csv # Example output CSV └── README.md # Project documentation
+## Technologies Used
 
+- **Programming Language**: Python
+- **Libraries**: pandas, Plotly, Streamlit, requests
+- **API**: Zillow API
+- **Version Control**: Git, GitHub
 
-## Setup Instructions
-**Clone the Repository**:
-git clone git@github.com:romanlicursi/real_estate_analyzer.git cd real_estate_analyzer
+## Screenshots
 
+### ROI Bar Chart
+![ROI Bar Chart](screenshots/roi_chart.png)
 
-**Set Up a Virtual Environment**:
-python3 -m venv venv source venv/bin/activate # On macOS/Linux
+### Price vs. Cash Flow Scatter Plot
+![Price vs. Cash Flow](screenshots/cash_flow_scatter.png)
 
+### Interactive Dashboard
+![Dashboard](screenshots/dashboard.png)
 
-**Install Dependencies**:
-pip install -r requirements.txt
+## Installation and Usage
 
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/romanlicursi/real_estate_analyzer.git
+   cd real_estate_analyzer
+   ```
 
-**Configure API Access**:
-- Create a `.env` file in the `config/` directory:
-  ```
-  ZILLOW_API_KEY=your_actual_api_key
-  ```
+2. **Create and Activate a Virtual Environment**:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Mac/Linux
+   venv\Scripts\activate     # On Windows
+   ```
 
-**Run the Project**:
-python src/data/api_client.py
+3. **Install Dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
+4. **Run the Dashboard**:
+   ```bash
+   streamlit run app/streamlit_dashboard.py
+   ```
 
-## Future Features
-- **Financial Calculations**:
-- Mortgage payment estimation
-- ROI and cash flow analysis
-- **Interactive Dashboard**:
-- Visualize property data with Plotly or Streamlit
-- **User Input**:
-- Custom filters for location, price range, and property type
+5. **Open the Provided URL in Your Browser**
 
-## Contributing
-Contributions are welcome! Feel free to submit a pull request or open an issue for suggestions.
+## Skills Demonstrated
+
+- **API Integration**: Integrated the Zillow API to fetch and process real estate data
+- **Data Analysis**: Cleaned and transformed raw data using pandas
+- **Financial Modeling**: Implemented ROI, cash flow, and mortgage calculations
+- **Visualization**: Created dynamic visualizations using Plotly
+- **Dashboard Development**: Built an interactive Streamlit dashboard for user-friendly analysis
+
+## Future Enhancements
+
+- Add a feature to compare multiple locations
+- Incorporate additional financial metrics like Cap Rate and IRR
+- Deploy the dashboard online for public access
 
 ## License
-This project is licensed under the MIT License.
 
-## Contact
-Created by **Roman Licursi**. Feel free to connect on [GitHub](https://github.com/romanlicursi).
+This project is licensed under the MIT License.
