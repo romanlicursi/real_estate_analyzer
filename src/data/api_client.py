@@ -3,6 +3,7 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), "../../"))
 import requests
 import pandas as pd
+from src.visualization.visualizations import plot_roi_bar_chart, plot_price_vs_cash_flow
 from dotenv import load_dotenv
 from src.analysis.financial_calculator import FinancialCalculator
 
@@ -86,19 +87,18 @@ def save_data_to_csv(df, filename="property_data.csv"):
 
 # Example usage
 if __name__ == "__main__":
-    # Fetch data for a specific location
     raw_data = fetch_property_data("Madison, WI")
-
-    # Debugging: Print raw data structure
-    if raw_data:
-        print("Raw Data Response:")
-        print(raw_data)
-
-    # Clean the data
     if raw_data:
         financial_data = analyze_properties_with_financials(raw_data)
         if not financial_data.empty:
             print("Financial Analysis Results:")
             print(financial_data)
+
+            # Save results to CSV
             financial_data.to_csv("financial_analysis.csv", index=False)
+            print("Financial analysis saved to financial_analysis.csv")
+
+            # Create visualizations
+            plot_roi_bar_chart(financial_data)
+            plot_price_vs_cash_flow(financial_data)
 
